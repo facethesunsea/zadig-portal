@@ -236,52 +236,56 @@ export default {
               name: '系统设置',
               icon: 'iconfont iconvery-setting',
               url: 'system'
-            },
-            {
-              name: '企业管理',
-              icon: 'iconfont iconcompany-info',
-              url: 'enterprise/'
             }
           ]
         }
       ],
-      plutusMenu: [
-        {
-          category_name: '客户交付',
-          items: [
-            {
-              name: '交付看板',
-              icon: 'iconfont iconBoardList',
-              url: 'plutus/deliveryBoard'
-            },
-            {
-              name: '版本',
-              icon: 'iconfont iconbanben1',
-              url: 'plutus/version'
-            },
-            {
-              name: '客户',
-              icon: 'iconfont iconCustomermanagement',
-              url: 'plutus/customer'
-            }
-          ]
-        }
-        // {
-        //   category_name: '发布中心',
-        //   items: [
-        //     // {
-        //     //   name: '工作流',
-        //     //   icon: 'iconfont iconvery-pipeline',
-        //     //   url: 'release/workflow'
-        //     // },
-        //     {
-        //       name: '环境',
-        //       icon: 'iconfont iconvery-environ',
-        //       url: 'release/environment'
-        //     }
-        //   ]
-        // }
-      ]
+      plutusMenu: {
+        feature: [
+          {
+            category_name: '客户交付',
+            items: [
+              {
+                name: '交付看板',
+                icon: 'iconfont iconBoardList',
+                url: 'plutus/deliveryBoard'
+              },
+              {
+                name: '版本',
+                icon: 'iconfont iconbanben1',
+                url: 'plutus/version'
+              },
+              {
+                name: '客户',
+                icon: 'iconfont iconCustomermanagement',
+                url: 'plutus/customer'
+              }
+            ]
+          }
+          // {
+          //   category_name: '发布中心',
+          //   items: [
+          //     // {
+          //     //   name: '工作流',
+          //     //   icon: 'iconfont iconvery-pipeline',
+          //     //   url: 'release/workflow'
+          //     // },
+          //     {
+          //       name: '环境',
+          //       icon: 'iconfont iconvery-environ',
+          //       url: 'release/environment'
+          //     }
+          //   ]
+          // }
+        ],
+        manage: [
+          {
+            name: '企业管理',
+            icon: 'iconfont iconcompany-info',
+            url: 'enterprise/'
+          }
+        ]
+      }
     }
   },
   methods: {
@@ -362,20 +366,22 @@ export default {
     navList () {
       const path = this.$route.path
       const defaultMenu = cloneDeep(this.defaultMenu)
+      const adminMenu = cloneDeep(this.adminMenu)
       if (path.includes('/v1/enterprise')) {
         return this.enterpriseMenu
       } else if (path.includes('/v1/system')) {
         return this.systemMenu
       }
-      if (
-        this.isAdmin &&
-        this.hasPlutus &&
-        !defaultMenu.find(menu => menu.category_name === '客户交付')
-      ) {
-        defaultMenu.splice(1, 0, ...this.plutusMenu)
+      if (this.isAdmin && this.hasPlutus) {
+        if (!defaultMenu.find(menu => menu.category_name === '客户交付')) {
+          defaultMenu.splice(1, 0, ...this.plutusMenu.feature)
+        }
+        if (!adminMenu[0].items.find(menu => menu.name === '企业管理')) {
+          adminMenu[0].items.splice(1, 0, ...this.plutusMenu.manage)
+        }
       }
       if (this.isAdmin) {
-        return defaultMenu.concat(this.adminMenu)
+        return defaultMenu.concat(adminMenu)
       } else {
         if (!this.showTestCenter) {
           remove(defaultMenu[0].items, item => {

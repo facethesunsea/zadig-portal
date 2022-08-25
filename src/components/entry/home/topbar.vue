@@ -141,7 +141,7 @@
                       <span class="profile-list__text">系统设置</span>
                     </li>
                   </router-link>
-                  <router-link to="/v1/enterprise/">
+                  <router-link v-if="hasPlutus" to="/v1/enterprise/">
                     <li class="profile-list__item">
                       <i class="iconfont iconcompany-info"></i>
                       <span class="profile-list__text">企业管理</span>
@@ -200,7 +200,8 @@ export default {
     ...mapGetters(['projectList', 'showSidebar']),
     ...mapState({
       role: state => state.login.role,
-      userInfo: state => state.login.userinfo
+      userInfo: state => state.login.userinfo,
+      hasPlutus: state => state.checkPlutus.hasPlutus
     }),
     filteredProjectList () {
       return this.projectList.filter(item => {
