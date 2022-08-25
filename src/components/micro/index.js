@@ -14,7 +14,7 @@ export const microApps = [
     name: 'plutusVendor',
     entry: `${prefix}/plutus-vendor/`,
     container: '#container',
-    activeRule: ['/v1/plutus', '/v1/enterprise'],
+    activeRule: ['/v1/plutus', '/v1/enterprise', '/v1/release'],
     props: {
       routerBase: '/v1',
       //   mainStore: store,
