@@ -15,7 +15,7 @@ const getters = {
   },
   projectAliasByName: (state) => (name) => {
     const project = state.projectList.find(project => project.name === name)
-    return project ? project.alias || name : ''
+    return (project && project.alias) || name
   },
   getOnboardingTemplates: (state) => {
     return state.projectList
