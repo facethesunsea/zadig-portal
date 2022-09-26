@@ -371,22 +371,19 @@ export default {
         return this.systemMenu
       }
       /** plutus menu */
-      if (this.signatureFeatures.delivery) {
-        if (!defaultMenu.find(menu => menu.category_name === '客户交付')) {
+      if (this.isAdmin && this.hasPlutus) {
+        if (this.signatureFeatures.delivery && !defaultMenu.find(menu => menu.category_name === '客户交付')) {
           defaultMenu.splice(1, 0, this.plutusMenu.delivery)
         }
-      }
-      if (this.signatureFeatures.release_center) {
-        if (!defaultMenu.find(menu => menu.category_name === '发布中心')) {
+        if (this.signatureFeatures.release_center && !defaultMenu.find(menu => menu.category_name === '发布中心')) {
           defaultMenu.splice(1, 0, this.plutusMenu.release_center)
+        }
+        if (!adminMenu[0].items.find(menu => menu.name === '企业管理')) {
+          adminMenu[0].items.splice(1, 0, this.plutusMenu.manage)
         }
       }
       /** End */
       if (this.isAdmin) {
-        // add enterprise manage tab
-        if (this.hasPlutus && !adminMenu[0].items.find(menu => menu.name === '企业管理')) {
-          adminMenu[0].items.splice(1, 0, this.plutusMenu.manage)
-        }
         return defaultMenu.concat(adminMenu)
       } else {
         if (!this.showTestCenter) {

@@ -22,9 +22,9 @@ const mutations = {
 }
 
 const actions = {
-  async checkPlutusStatus ({ commit, dispatch }) {
+  async checkPlutusStatus ({ commit, dispatch }, payload) {
     const res = await checkPlutusAPI().catch(err => { console.log(err) })
-    if (res) {
+    if (res && payload.isAdmin) {
       const res = await dispatch('getSignatureFeatures')
       router.addRoutes(plutusRoute(res))
     }

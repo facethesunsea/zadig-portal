@@ -104,7 +104,7 @@
 import ValidateSubmit from '@utils/validateAsync'
 import AdvancedConfig from '@/components/projects/build/advancedConfig.vue'
 import EnvTypeSelect from './envTypeSelect.vue'
-import { buildEnvs, validateJobName } from '../config.js'
+import { validateJobName } from '../config.js'
 import { cloneDeep } from 'lodash'
 
 export default {

@@ -87,7 +87,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (userName() && !store.state.checkPlutus.plutusChecked) {
-    await store.dispatch('checkPlutusStatus')
+    await store.dispatch('checkPlutusStatus', { isAdmin: isSuperAdmin() })
     next(to)
   }
 
