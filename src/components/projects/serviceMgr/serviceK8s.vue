@@ -165,7 +165,7 @@ import ServiceAside from './k8s/serviceAside.vue'
 import ServiceEditor from './k8s/serviceEditor.vue'
 import ServiceTree from './common/serviceTree.vue'
 import IntegrationCode from './common/integrationCode.vue'
-import { sortBy, cloneDeep } from 'lodash'
+import { sortBy, cloneDeep, uniqBy } from 'lodash'
 import { getSingleProjectAPI, getServiceTemplatesAPI, getServicesTemplateWithSharedAPI, serviceTemplateWithConfigAPI, autoUpgradeEnvAPI, listProductAPI, getServiceDeployableEnvsAPI } from '@api'
 import { Multipane, MultipaneResizer } from 'vue-multipane'
 import { mapState } from 'vuex'
@@ -419,9 +419,10 @@ export default {
     },
     deployableEnvListWithVars () {
       const curServiceName = this.service.service_name
+      const vars = cloneDeep(this.detectedEnvs.filter(item => item.services.includes(curServiceName)))
       return this.deployableEnvs.map(env => {
-        const vars = cloneDeep(this.detectedEnvs.filter(item => item.services.includes(curServiceName)))
-        this.$set(env, 'vars', vars)
+        const envVars = env.vars.filter(item => item.services.includes(curServiceName))
+        this.$set(env, 'vars', uniqBy([].concat(envVars, vars), 'key'))
         env.hasDeployed = env.services.includes(curServiceName)
         env.checkResource = {
           env_name: env.env_name,

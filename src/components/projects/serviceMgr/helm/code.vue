@@ -459,7 +459,14 @@ export default {
         }
       } else {
         this.chartInfo = {
-          chartNames: this.updateEnv,
+          chartNames: this.updateEnv.length
+            ? this.updateEnv
+            : [
+              {
+                serviceName: this.$route.query.service_name,
+                type: 'update'
+              }
+            ],
           actionServiceName: this.$route.query.service_name,
           type: ''
         }
