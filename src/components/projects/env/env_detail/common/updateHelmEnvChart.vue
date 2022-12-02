@@ -32,27 +32,24 @@
             release 名称在命名空间已存在
           </span>
         </div>
-        <div class="v-content" v-if="usedChartNameInfo">
-          <div class="ope-content" :class="{hidden: usedChartNameInfo.deploy_strategy === 'import'}">
-            <div v-show="usedChartNameInfo.yamlSource === 'default'" class="default-values">
-              <el-button type="text" @click="usedChartNameInfo.yamlSource = 'customEdit'">添加 values 文件</el-button>
-            </div>
-            <ImportValues
-              v-show="usedChartNameInfo.yamlSource !== 'default'"
-              showDelete
-              showAutoSync
-              ref="importValuesRef"
-              :resize="{direction: 'vertical'}"
-              :importRepoInfo="usedChartNameInfo"
-            />
-            <KeyValue
-              ref="keyValueRef"
-              :keyValues="usedChartNameInfo.overrideValues"
-              :listKeyValues="listKeyValues"
-              @estimatedValues="getCalculatedValuesYaml"
-            />
-            <div class="mask"></div>
+        <div class="v-content" v-if="usedChartNameInfo" :class="{hidden: usedChartNameInfo.deploy_strategy === 'import'}">
+          <div v-show="usedChartNameInfo.yamlSource === 'default'" class="default-values">
+            <el-button type="text" @click="usedChartNameInfo.yamlSource = 'customEdit'">添加 values 文件</el-button>
           </div>
+          <ImportValues
+            v-show="usedChartNameInfo.yamlSource !== 'default'"
+            showDelete
+            showAutoSync
+            ref="importValuesRef"
+            :resize="{direction: 'vertical'}"
+            :importRepoInfo="usedChartNameInfo"
+          />
+          <KeyValue
+            ref="keyValueRef"
+            :keyValues="usedChartNameInfo.overrideValues"
+            :listKeyValues="listKeyValues"
+            @estimatedValues="getCalculatedValuesYaml"
+          />
           <section class="review-content">
             <div class="review-title">
               <el-button type="text" @click="getReviewValuesFile">
@@ -63,6 +60,7 @@
             </div>
             <Codemirror class="codemirror" ref="codemirror" v-if="showReview" :value="usedChartNameInfo.yamlContent" :cmOption="cmOption" />
           </section>
+          <div class="mask"></div>
         </div>
       </div>
       <div class="mask"></div>
@@ -733,11 +731,8 @@ export default {
       }
 
       .v-content {
+        position: relative;
         padding-bottom: 10px;
-
-        .ope-content {
-          position: relative;
-        }
 
         .version-title {
           height: 40px;
