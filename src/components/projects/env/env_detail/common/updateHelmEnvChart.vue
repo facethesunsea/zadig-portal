@@ -33,23 +33,26 @@
           </span>
         </div>
         <div class="v-content" v-if="usedChartNameInfo">
-          <div v-show="usedChartNameInfo.yamlSource === 'default'" class="default-values">
-            <el-button type="text" @click="usedChartNameInfo.yamlSource = 'customEdit'">添加 values 文件</el-button>
+          <div class="ope-content" :class="{hidden: usedChartNameInfo.deploy_strategy === 'import'}">
+            <div v-show="usedChartNameInfo.yamlSource === 'default'" class="default-values">
+              <el-button type="text" @click="usedChartNameInfo.yamlSource = 'customEdit'">添加 values 文件</el-button>
+            </div>
+            <ImportValues
+              v-show="usedChartNameInfo.yamlSource !== 'default'"
+              showDelete
+              showAutoSync
+              ref="importValuesRef"
+              :resize="{direction: 'vertical'}"
+              :importRepoInfo="usedChartNameInfo"
+            />
+            <KeyValue
+              ref="keyValueRef"
+              :keyValues="usedChartNameInfo.overrideValues"
+              :listKeyValues="listKeyValues"
+              @estimatedValues="getCalculatedValuesYaml"
+            />
+            <div class="mask"></div>
           </div>
-          <ImportValues
-            v-show="usedChartNameInfo.yamlSource !== 'default'"
-            showDelete
-            showAutoSync
-            ref="importValuesRef"
-            :resize="{direction: 'vertical'}"
-            :importRepoInfo="usedChartNameInfo"
-          />
-          <KeyValue
-            ref="keyValueRef"
-            :keyValues="usedChartNameInfo.overrideValues"
-            :listKeyValues="listKeyValues"
-            @estimatedValues="getCalculatedValuesYaml"
-          />
           <section class="review-content">
             <div class="review-title">
               <el-button type="text" @click="getReviewValuesFile">
@@ -216,9 +219,12 @@ export default {
       hasPlutus: state => state.checkPlutus.hasPlutus
     }),
     showCheckResource () {
-      return this.hasPlutus && (
-        this.checkResource ||
-        (this.envInfos && this.envInfos[this.selectedEnv] && !this.envInfos[this.selectedEnv].hasDeployed)
+      return (
+        this.hasPlutus &&
+        (this.checkResource ||
+          (this.envInfos &&
+            this.envInfos[this.selectedEnv] &&
+            !this.envInfos[this.selectedEnv].hasDeployed))
       )
     }
   },
@@ -531,7 +537,12 @@ export default {
               return
             }
             this.getChartValuesYaml({ envName: env })
-            if (this.hasPlutus && this.envInfos && this.envInfos[env] && !this.envInfos[env].hasDeployed) {
+            if (
+              this.hasPlutus &&
+              this.envInfos &&
+              this.envInfos[env] &&
+              !this.envInfos[env].hasDeployed
+            ) {
               const payload = cloneDeep(this.envInfos[env])
               delete payload.hasDeployed
               this.checkSvcResource(payload, payload.env_name)
@@ -724,6 +735,10 @@ export default {
       .v-content {
         padding-bottom: 10px;
 
+        .ope-content {
+          position: relative;
+        }
+
         .version-title {
           height: 40px;
           line-height: 40px;
@@ -755,18 +770,18 @@ export default {
     &.max-width {
       width: 100%;
     }
+  }
 
-    &.hidden {
-      .mask {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 1;
-        background-color: rgba(255, 255, 255, 0.5);
-        cursor: not-allowed;
-      }
+  .hidden {
+    .mask {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      background-color: rgba(255, 255, 255, 0.5);
+      cursor: not-allowed;
     }
   }
 }

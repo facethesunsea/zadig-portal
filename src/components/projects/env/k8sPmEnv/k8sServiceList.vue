@@ -59,7 +59,7 @@
           <div class="service-content">
             <template v-if="service.type==='k8s' && service.containers">
               <el-form-item v-for="con of service.containers" :key="con.name" :label="con.name" label-width="40%">
-                <el-select v-model="con.image" :disabled="cantOperate" filterable size="small">
+                <el-select v-model="con.image" :disabled="cantOperate || service.deploy_strategy === 'import'" filterable size="small">
                   <virtual-scroll-list
                     v-if="imageMap[con.image_name] && imageMap[con.image_name].length > 200"
                     style="height: 272px; overflow-y: auto;"
