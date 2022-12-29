@@ -412,7 +412,7 @@
     <div class="section">
       <el-alert type="info" :closable="false">
         <template>
-          支持阿里云 ACK、腾讯云 TKE、腾讯云 EKS、华为云 CCE 等 K8s 集群的接入和使用，详情可参考
+          支持阿里云 ACK、腾讯云 TKE、腾讯云 TKE Serverless、华为云 CCE 等 K8s 集群的接入和使用，详情可参考
           <el-link
             style="font-size: 14px; vertical-align: baseline;"
             type="primary"
@@ -748,7 +748,7 @@ export default {
           },
           {
             value: 5,
-            label: '腾讯云 EKS',
+            label: '腾讯云 TKE Serverless',
             icon: 'iconfont icontengxunyun'
           },
           {
