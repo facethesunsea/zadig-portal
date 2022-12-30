@@ -56,7 +56,7 @@ export default {
           {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'error'
+            type: 'warning'
           }
         ).then(() => {
           this.updateK8sEnvVar()
